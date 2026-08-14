@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArtSpace</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>🎨 ArtSpace</h1>
+  <p>Discover amazing artwork</p>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Create Account</a>
+    <a href="upload.html">Upload Artwork</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h2>Welcome to ArtSpace</h2>
+    <p>Share, discover and enjoy beautiful artwork.</p>
+  </section>
+
+  <section id="artworks">
+    <h2>Latest Artworks</h2>
+
+    <div id="artwork-list">
+      <p>Loading artworks...</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 ArtSpace</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://qpbimhiaxpeawuazvori.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_M7nFBDP8VYJODeTweCfWhQ_50atMXO";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+async function loadArtworks() {
+
+  const list =
+    document.getElementById("artwork-list");
+
+  const { data, error } =
+    await supabaseClient
+      .from("artworks")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    list.innerHTML =
+      "<p>Could not load artworks.</p>";
+    console.error(error);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    list.innerHTML =
+      "<p>No artworks uploaded yet.</p>";
+    return;
+  }
+
+  list.innerHTML = data.map(artwork => `
+    <div class="artwork-card">
+
+      <img
+        src="${artwork.image_url}"
+        alt="${artwork.title || "Artwork"}"
+      >
+
+      <h3>${artwork.title || "Untitled"}</h3>
+
+      <p>
+        ${artwork.description || ""}
+      </p>
+
+    </div>
+  `).join("");
+}
+
+loadArtworks();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Upload Artwork - ArtSpace</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+  <h1>🎨 ArtSpace</h1>
+
+  <nav>
+    <a href="index.html">Home</a>
+  </nav>
+
+</header>
+
+<main>
+
+  <div class="hero">
+
+    <h2>Upload Artwork</h2>
+
+    <input
+      type="text"
+      id="title"
+      placeholder="Artwork title"
+    >
+
+    <br><br>
+
+    <textarea
+      id="description"
+      placeholder="Artwork description"
+      style="width:100%; min-height:120px;"
+    ></textarea>
+
+    <br><br>
+
+    <input
+      type="file"
+      id="image"
+      accept="image/*"
+    >
+
+    <br><br>
+
+    <button onclick="uploadArtwork()">
+      Upload Artwork
+    </button>
+
+    <p id="message"></p>
+
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://qpbimhiaxpeawuazvori.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_M7nFBDP8VYJODeTweCfWhQ_50atMXO";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+async function uploadArtwork() {
+
+  const title =
+    document.getElementById("title")
+      .value.trim();
+
+  const description =
+    document.getElementById("description")
+      .value.trim();
+
+  const imageFile =
+    document.getElementById("image")
+      .files[0];
+
+  const message =
+    document.getElementById("message");
+
+  if (!title || !imageFile) {
+
+    message.textContent =
+      "Please enter a title and choose an image.";
+
+    return;
+  }
+
+  message.textContent =
+    "Uploading...";
+
+  const fileName =
+    Date.now() + "-" + imageFile.name;
+
+  const { error: uploadError } =
+    await supabaseClient.storage
+      .from("artworks")
+      .upload(
+        fileName,
+        imageFile
+      );
+
+  if (uploadError) {
+
+    message.textContent =
+      "Image upload failed: " +
+      uploadError.message;
+
+    return;
+  }
+
+  const { data } =
+    supabaseClient.storage
+      .from("artworks")
+      .getPublicUrl(fileName);
+
+  const imageUrl =
+    data.publicUrl;
+
+  const { error: databaseError } =
+    await supabaseClient
+      .from("artworks")
+      .insert({
+
+        title: title,
+
+        image_url: imageUrl,
+
+        description: description
+
+      });
+
+  if (databaseError) {
+
+    message.textContent =
+      "Database error: " +
+      databaseError.message;
+
+    return;
+  }
+
+  message.textContent =
+    "Artwork uploaded successfully! 🎉";
+
+  document.getElementById("title")
+    .value = "";
+
+  document.getElementById("description")
+    .value = "";
+
+  document.getElementById("image")
+    .value = "";
+
+}
+
+</script>
+
+</body>
+
+</html>

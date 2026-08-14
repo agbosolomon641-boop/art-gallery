@@ -1,0 +1,214 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  color: #222;
+  transition: 0.3s;
+}
+
+header {
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 25px 15px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 34px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+nav a,
+nav button {
+  border: none;
+  background: #333;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+.hero {
+  background: white;
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+.hero h2 {
+  font-size: 32px;
+}
+
+#search {
+  width: 90%;
+  max-width: 600px;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+#artworks {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+}
+
+#artworks > h2 {
+  text-align: center;
+}
+
+#artwork-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.artwork-card {
+  background: #f7f7f7;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.artwork-card:hover {
+  transform: translateY(-5px);
+}
+
+.artwork-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 15px;
+}
+
+.card-info h3 {
+  margin-top: 0;
+}
+
+.card-info button {
+  border: none;
+  padding: 9px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.card-info button.liked {
+  transform: scale(1.08);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  max-width: 700px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.modal-content img {
+  max-width: 100%;
+  max-height: 60vh;
+  border-radius: 10px;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 5px;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+footer {
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  margin-top: 30px;
+}
+
+/* DARK MODE */
+
+body.dark {
+  background: #121212;
+  color: white;
+}
+
+body.dark .hero,
+body.dark #artworks,
+body.dark .modal-content {
+  background: #1e1e1e;
+}
+
+body.dark .artwork-card {
+  background: #292929;
+}
+
+body.dark #search {
+  background: #222;
+  color: white;
+  border-color: #555;
+}
+
+@media (max-width: 600px) {
+
+  header h1 {
+    font-size: 28px;
+  }
+
+  nav {
+    flex-direction: column;
+  }
+
+  nav a,
+  nav button {
+    width: 90%;
+  }
+
+  .hero h2 {
+    font-size: 25px;
+  }
+
+  #artwork-list {
+    grid-template-columns: 1fr;
+  }
+
+}
